@@ -18,6 +18,5 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         // Hello World!
-        // Hello World!
     }
 }
