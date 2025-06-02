@@ -45,4 +45,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation("com.google.mlkit:object-detection:17.0.0")
+    implementation("com.google.mlkit:vision-common:17.3.0")
 }

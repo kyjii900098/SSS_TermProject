@@ -24,6 +24,8 @@
         <activity android:name=".GameActivity" />
         <activity android:name=".PetNameActivity" />
         <activity android:name=".SelectPetActivity" />
+        <activity android:name=".SleepActivity" />
+        <activity android:name=".FeedActivity" />
     </application>
 
 </manifest>
