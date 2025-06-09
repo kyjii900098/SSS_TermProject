@@ -17,19 +17,20 @@ class SelectPetActivity : AppCompatActivity() {
         val pet3Button = findViewById<Button>(R.id.pet3Button)
 
         pet1Button.setOnClickListener {
-            goToPetNameActivity(R.drawable.sanjini)
+            goToPetNameActivity(R.drawable.bird_frame1, "sanjini")
         }
         pet2Button.setOnClickListener {
-            goToPetNameActivity(R.drawable.hobanu)
+            goToPetNameActivity(R.drawable.cow_frame1, "hobanu")
         }
         pet3Button.setOnClickListener {
-            goToPetNameActivity(R.drawable.chacha)
+            goToPetNameActivity(R.drawable.horse_frame1, "chacha")
         }
     }
 
-    private fun goToPetNameActivity(imageResId: Int) {
+    private fun goToPetNameActivity(imageResId: Int, characterType: String) {
         val intent = Intent(this, PetNameActivity::class.java)
         intent.putExtra("petImageResId", imageResId)
+        intent.putExtra("characterType", characterType)
         startActivity(intent)
     }
 }

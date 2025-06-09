@@ -14,7 +14,8 @@ class SleepActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sleep)
 
-        val petImageResId = intent.getIntExtra("petImageResId", R.drawable.sanjini)
+        val petImageResId = intent.getIntExtra("petImageResId", 0)
+        val characterType = intent.getStringExtra("characterType") ?: "sanjini"
         val petName = intent.getStringExtra("petName") ?: "이름 없음"
         val health = intent.getIntExtra("health", 80)
         val mood = intent.getIntExtra("mood", 70)
@@ -44,6 +45,7 @@ class SleepActivity : AppCompatActivity() {
             intent.putExtra("sleepMode", true)
             intent.putExtra("sleepDuration", sleepMinutes)  // ← 수면 시간(분)
             intent.putExtra("petImageResId", petImageResId)
+            intent.putExtra("characterType", characterType)
             intent.putExtra("petName", petName)
             intent.putExtra("health", health)
             intent.putExtra("mood", mood)

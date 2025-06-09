@@ -23,10 +23,10 @@
 
         <!-- 산지니 -->
         <ImageView
-            android:id="@+id/pet1Image"
+            android:id="@+id/sanjini"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:src="@drawable/sanjini"
+            android:src="@drawable/bird_frame1"
             android:layout_marginBottom="8dp" />
 
         <Button
@@ -38,10 +38,10 @@
 
         <!-- 호반우 -->
         <ImageView
-            android:id="@+id/pet2Image"
+            android:id="@+id/hobanu"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:src="@drawable/hobanu"
+            android:src="@drawable/cow_frame1"
             android:layout_marginBottom="8dp" />
 
         <Button
@@ -53,10 +53,10 @@
 
         <!-- 차차 -->
         <ImageView
-            android:id="@+id/pet3Image"
+            android:id="@+id/chacha"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:src="@drawable/chacha"
+            android:src="@drawable/horse_frame1"
             android:layout_marginBottom="8dp" />
 
         <Button

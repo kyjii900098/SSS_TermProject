@@ -13,7 +13,7 @@
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_marginBottom="24dp"
-        android:src="@drawable/sanjini" />
+        android:src="@drawable/bird_frame1" />
 
     <EditText
         android:id="@+id/petNameInput"
