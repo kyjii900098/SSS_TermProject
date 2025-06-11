@@ -20,12 +20,32 @@ import java.io.IOException
 import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.viewpager2.widget.ViewPager2
 
 class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     companion object {
         private const val LOCATION_PERMISSION_CODE = 1001
     }
+
+    private var currentBackgroundIndex = 0                  // fragment
+    private val backgroundFragments = listOf(
+        BackgroundFragment1(),
+        BackgroundFragment2(),
+        BackgroundFragment3()
+    )
+
+    private fun setupBackgroundChangeButton() {
+        findViewById<Button>(R.id.changeBackgroundButton).setOnClickListener {
+            currentBackgroundIndex = (currentBackgroundIndex + 1) % backgroundFragments.size
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.backgroundFragmentContainer, backgroundFragments[currentBackgroundIndex])
+                .commit()
+        }
+    }
+    // fragment
+
+
 
     private lateinit var healthBar: ProgressBar
     private lateinit var moodBar: ProgressBar
@@ -129,6 +149,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 Log.e("WeatherGreeting", "날씨 인삿말 오류: ${e.message}")
             }
         }
+        setupBackgroundChangeButton()
     }
 
     private fun setupButtons(petImageResId: Int, petName: String, characterType: String) {
@@ -199,7 +220,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 if (mood >= 100){
                     mood = 100
                 }
-                delay(1000L)
+                delay(2500L)
                 if (health > 0){
                     health --
                 }
