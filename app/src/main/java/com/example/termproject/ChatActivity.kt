@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import android.content.Intent
 
 class ChatActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private lateinit var messageInput: EditText
@@ -42,11 +43,14 @@ class ChatActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         sendButton = findViewById(R.id.sendButton)
         recyclerView = findViewById(R.id.chatRecyclerView)
 
+
         chatAdapter = ChatAdapter(chatMessages)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = chatAdapter
 
         characterType = intent.getStringExtra("characterType") ?: "sanjini"
+        val health = intent.getIntExtra("health", 80) // 기본값 80
+        val mood = intent.getIntExtra("mood", 70)     // 기본값 70
 
         sendButton.setOnClickListener {
             val message = messageInput.text.toString().trim()
@@ -60,8 +64,15 @@ class ChatActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
         val backButton: Button = findViewById(R.id.backButton)
         backButton.setOnClickListener {
-            finish() // GameActivity로 돌아감
+            val intent = Intent(this, GameActivity::class.java)
+            intent.putExtra("sleepMode", true)
+            intent.putExtra("characterType", characterType)
+            intent.putExtra("health", health)
+            intent.putExtra("mood", mood)
+            startActivity(intent)
+            finish()
         }
+
 
         messageInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEND) {
@@ -69,7 +80,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 true
             } else false
         }
-        loadChatHistory() // ✅ Firebase에서 기존 대화 불러오기
+        //loadChatHistory() // ✅ Firebase에서 기존 대화 불러오기
     }
 
     private fun saveMessageToFirebase(message: ChatMessage) {

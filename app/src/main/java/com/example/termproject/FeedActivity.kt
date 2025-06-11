@@ -4,21 +4,21 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
-import com.google.mlkit.vision.objects.ObjectDetector
-import com.google.mlkit.vision.objects.ObjectDetection
 import android.graphics.Bitmap
 import com.google.mlkit.vision.common.InputImage
 import android.provider.MediaStore
 import android.app.Activity
+import com.example.termproject.adapter.ChatAdapter
+import com.google.mlkit.vision.label.ImageLabeling
+import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 
 class FeedActivity : AppCompatActivity() {
 
     private lateinit var imageView: ImageView
     private lateinit var selectBtn: Button
     private lateinit var feedBtn: Button
+    private var characterType : String = "sanjini"
     private var imageBitmap: Bitmap? = null
-    private lateinit var objectDetector: ObjectDetector
 
     // 전달받을 정보
     private var petImageResId: Int = R.drawable.sanjini
@@ -35,18 +35,12 @@ class FeedActivity : AppCompatActivity() {
         feedBtn = findViewById(R.id.feedConfirmButton)
 
         // 전달받은 인텐트 값 추출
+
         petImageResId = intent.getIntExtra("petImageResId", R.drawable.sanjini)
         petName = intent.getStringExtra("petName") ?: "펫"
         health = intent.getIntExtra("health", 50)
         mood = intent.getIntExtra("mood", 50)
-
-        // ML Kit 객체 탐지기 설정
-        val options = ObjectDetectorOptions.Builder()
-            .setDetectorMode(ObjectDetectorOptions.SINGLE_IMAGE_MODE)
-            .enableMultipleObjects()
-            .enableClassification()
-            .build()
-        objectDetector = ObjectDetection.getClient(options)
+        characterType = intent.getStringExtra("characterType") ?: "sanjini"
 
         // 이미지 선택
         selectBtn.setOnClickListener {
@@ -59,31 +53,31 @@ class FeedActivity : AppCompatActivity() {
         feedBtn.setOnClickListener {
             imageBitmap?.let { bitmap ->
                 val inputImage = InputImage.fromBitmap(bitmap, 0)
-                objectDetector.process(inputImage)
-                    .addOnSuccessListener { objects ->
-                        var result = "알 수 없음"
-                        for (obj in objects) {
-                            for (label in obj.labels) {
-                                result = label.text
-                                break
-                            }
-                        }
+
+                // ✅ 이미지 라벨링 클라이언트 생성
+                val labeler = ImageLabeling.getClient(ImageLabelerOptions.DEFAULT_OPTIONS)
+
+                labeler.process(inputImage)
+                    .addOnSuccessListener { labels ->
+                        val result = if (labels.isNotEmpty()) labels[0].text else "알 수 없음"
                         Toast.makeText(this, "$result 먹였어요!", Toast.LENGTH_SHORT).show()
 
                         // ▶ GameActivity로 정보 전달
                         val resultIntent = Intent(this, GameActivity::class.java)
-                        resultIntent.putExtra("sleepMode", false) // 수면 모드 아님
-                        resultIntent.putExtra("sleepDuration", 0) // 0분
+                        resultIntent.putExtra("sleepMode", false)
+                        resultIntent.putExtra("sleepDuration", 0)
+                        resultIntent.putExtra("petImageResId", petImageResId)
                         resultIntent.putExtra("petImageResId", petImageResId)
                         resultIntent.putExtra("petName", petName)
-                        resultIntent.putExtra("health", health)
+                        resultIntent.putExtra("health", health+20)
                         resultIntent.putExtra("mood", mood)
                         resultIntent.putExtra("fedFood", result)
+                        resultIntent.putExtra("characterType", characterType)
                         startActivity(resultIntent)
                         finish()
                     }
                     .addOnFailureListener {
-                        Toast.makeText(this, "인식 실패", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "음식 인식 실패", Toast.LENGTH_SHORT).show()
                     }
             }
         }

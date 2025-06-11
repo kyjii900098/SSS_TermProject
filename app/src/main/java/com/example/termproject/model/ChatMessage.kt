@@ -1,7 +1,10 @@
 package com.example.termproject.model
 
 data class ChatMessage(
-    val text: String,
-    val isUser: Boolean,         // true: 사용자, false: 캐릭터
-    val timestamp: Long = System.currentTimeMillis()
-)
+    var text: String = "",
+    var isUser: Boolean = false,
+    var timestamp: Long = 0L
+) {
+    // ✅ 명시적 기본 생성자 (Firebase 역직렬화를 위해 필요)
+    constructor() : this("", false, 0L)
+}

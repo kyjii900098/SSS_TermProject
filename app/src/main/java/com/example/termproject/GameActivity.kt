@@ -60,6 +60,24 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         health = intent.getIntExtra("health", 80)
         mood = intent.getIntExtra("mood", 70)
 
+
+        var sleepMode = intent.getBooleanExtra("sleepMode", false)      //sleep 결과 받아오기
+        val sleepDurationMinutes = intent.getIntExtra("sleepDuration", 0)
+        if (sleepMode && sleepDurationMinutes > 0) {
+            val totalSeconds = sleepDurationMinutes
+            launch {
+                for (i in 1..totalSeconds) {
+                    delay(1000L)
+                    health = (health + 5).coerceAtMost(100)
+                    updateStatusBars()
+                }
+                speechBubble.text = "푹 잤어요! 😊 체력이 회복됐어요."
+                speechBubble.visibility = View.VISIBLE
+
+                sleepMode = false // 🟢 한 번만 실행되도록 종료
+            }
+        }                                                                               // sleep 끝
+        
         petNameText.text = "이름: $petName"
 
         // 캐릭터에 따라 애니메이션 프레임 설정
@@ -120,6 +138,8 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             intent.putExtra("petName", petName) // 필요시 이름 전달
             intent.putExtra("petImageResId", petImageResId) // 필요시 캐릭터도
             intent.putExtra("characterType", characterType)
+            intent.putExtra("health", health)
+            intent.putExtra("mood", mood)
             startActivity(intent)
             updateStatusBars()
         }
@@ -173,9 +193,19 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private fun startAutoDecrease() {
         launch {
             while (isActive) {
-                delay(3000L)
-                if (health > 0) health--
-                if (mood > 0) mood--
+                if (health >= 100){
+                    health = 100
+                }
+                if (mood >= 100){
+                    mood = 100
+                }
+                delay(1000L)
+                if (health > 0){
+                    health --
+                }
+                if (mood > 0){
+                    mood  --
+                }
                 updateStatusBars()
             }
         }
