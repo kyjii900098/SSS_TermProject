@@ -10,6 +10,11 @@ import android.provider.MediaStore
 import android.app.Activity
 import com.google.mlkit.vision.label.ImageLabeling
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import android.Manifest
+
 
 class FeedActivity : AppCompatActivity() {
 
@@ -28,6 +33,7 @@ class FeedActivity : AppCompatActivity() {
     companion object {
         private const val GALLERY_REQUEST_CODE = 1001
         private const val CAMERA_REQUEST_CODE = 1002
+        private const val CAMERA_PERMISSION_CODE = 2001
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,8 +53,7 @@ class FeedActivity : AppCompatActivity() {
 
         // 📷 카메라 촬영
         cameraBtn.setOnClickListener {
-            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
+            checkCameraPermissionAndOpenCamera()
         }
 
         // 📁 갤러리 선택
@@ -85,6 +90,37 @@ class FeedActivity : AppCompatActivity() {
                         Toast.makeText(this, "음식 인식 실패", Toast.LENGTH_SHORT).show()
                     }
             }
+        }
+    }
+    private fun checkCameraPermissionAndOpenCamera() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
+        } else {
+            openCamera()
+        }
+    }
+
+    private fun openCamera() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
+    }
+
+    // ✅ 카메라 실행
+    private fun launchCamera() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
+    }
+
+    // ✅ 권한 요청 결과 처리
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == CAMERA_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            openCamera()
+        } else {
+            Toast.makeText(this, "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
