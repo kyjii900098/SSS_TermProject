@@ -134,6 +134,9 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 speechBubble.text = "푹 잤어요! 😊 체력이 회복됐어요."
                 speechBubble.visibility = View.VISIBLE
             }
+        } else {
+            petImageView.setImageResource(frame1Res)
+            startImageAnimation()
         }
         // sleep 끝
 
@@ -198,10 +201,6 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 putExtra("mood", mood)
             }
             startActivity(intent)
-        }
-
-        findViewById<Button>(R.id.saveButton).setOnClickListener {
-            Toast.makeText(this, "저장되었습니다 !", Toast.LENGTH_SHORT).show()
         }
 
         findViewById<Button>(R.id.saveButton).setOnClickListener {
