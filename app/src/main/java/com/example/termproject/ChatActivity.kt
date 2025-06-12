@@ -111,9 +111,9 @@ class ChatActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 val response = ChatGPTService.getResponse(message, characterType)
                 Log.d("ChatDebug", "GPT 응답: $response")
 
-                chatMessages.add(ChatMessage(response, isUser = false))     // ✅ 리스트에 추가
-                chatAdapter.notifyItemInserted(chatMessages.size - 1)       // ✅ UI 갱신
-                recyclerView.scrollToPosition(chatMessages.size - 1)        // ✅ 맨 아래로 스크롤
+                chatMessages.add(ChatMessage(response, isUser = false))
+                chatAdapter.notifyItemInserted(chatMessages.size - 1)
+                recyclerView.scrollToPosition(chatMessages.size - 1)
 
             } catch (e: Exception) {
                 Log.e("ChatDebug", "응답 실패: ${e.message}")
