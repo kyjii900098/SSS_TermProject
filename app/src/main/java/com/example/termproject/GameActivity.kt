@@ -99,7 +99,6 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             }
         }
 
-
         launch {
             try {
                 val greeting = WeatherFetcher.fetchWeatherGreeting()
@@ -109,8 +108,6 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 Log.e("WeatherGreeting", "날씨 인삿말 오류: ${e.message}")
             }
         }
-
-
 
         petNameText.text = "이름: $petName"
 
@@ -130,19 +127,20 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
                 // 수면 종료 후 일반 애니메이션으로 복귀
                 petImageView.setImageResource(frame1Res)
-                //startImageAnimation()
+                startImageAnimation() // 🌟 수면 후에만 애니메이션 시작!
                 speechBubble.text = "푹 잤어요! 😊 체력이 회복됐어요."
                 speechBubble.visibility = View.VISIBLE
             }
+        } else {
+            // 수면 아닐 때만 즉시 애니메이션 시작
+            petImageView.setImageResource(frame1Res)
+            startImageAnimation()
         }
+
         // sleep 끝
 
         Log.d("GameDebug", "onCreate 시작")
         Log.d("GameDebug", "characterType: $characterType, petImageResId: $petImageResId")
-
-        // 초기 이미지 설정 및 애니메이션 시작
-        petImageView.setImageResource(frame1Res)
-        startImageAnimation()
 
         updateStatusBars()
 
@@ -227,7 +225,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 val frame = if (isFirstFrame) frame1Res else frame2Res
                 petImageView.setImageResource(frame)
                 isFirstFrame = !isFirstFrame
-                animationHandler.postDelayed(this, 500)
+                animationHandler.postDelayed(this, 1000L)
             }
         }
         animationHandler.post(animationRunnable)
