@@ -1,47 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:background="#FFF8E1"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
     <TextView
-        android:id="@+id/titleText"
+        android:id="@+id/universityText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="다마고치"
-        android:textSize="32sp"
+        android:text="부산대학교"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/mascotLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="마스코트"
+        android:textColor="#000000"
+        android:textSize="30sp"
         android:textStyle="bold"
-        android:layout_marginBottom="40dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/universityText" />
 
-    <Button
-        android:id="@+id/startButton"
+
+    <TextView
+        android:id="@+id/damagotchiLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="시작하기"
-        android:padding="16dp"
-        android:textSize="18sp"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginTop="4dp"
+        android:text="다마고치"
+        android:textColor="#000000"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mascotLabel" />
 
-    <Button
-        android:id="@+id/continueButton"
+    <TextView
+        android:id="@+id/instructionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="이어하기"
-        android:padding="16dp"
-        android:textSize="18sp"
-        android:layout_marginBottom="20dp" />
+        android:text="버튼을 클릭해 주세요"
+        android:textColor="#333333"
+        android:textSize="14sp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@id/buttonGroup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/exitButton"
+    <!-- 📦 버튼 그룹 (가로 배치, 직사각형 버튼) -->
+    <LinearLayout
+        android:id="@+id/buttonGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="종료하기"
-        android:padding="16dp"
-        android:textSize="18sp" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="64dp"
+        app:layout_constraintBottom_toTopOf="@id/footerText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-</LinearLayout>
+        <Button
+            android:id="@+id/continueButton"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:text="이어하기"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#7E57C2"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/holo_purple" />
+
+        <Button
+            android:id="@+id/startButton"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:text="시작하기"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#7E57C2"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/holo_purple" />
+
+        <Button
+            android:id="@+id/exitButton"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:text="종료하기"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#7E57C2"
+            android:background="@android:color/holo_purple" />
+    </LinearLayout>
+
+    <!-- 📄 푸터 텍스트 -->
+    <TextView
+        android:id="@+id/footerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="치타는 웃고있다. All rights reserved."
+        android:textColor="#DAA520"
+        android:textSize="14sp"
+        android:layout_marginBottom="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
