@@ -23,7 +23,6 @@ import java.util.*
 import androidx.viewpager2.widget.ViewPager2
 
 class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
-
     companion object {
         private const val LOCATION_PERMISSION_CODE = 1001
     }
@@ -45,8 +44,6 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     }
     // fragment
 
-
-
     private lateinit var healthBar: ProgressBar
     private lateinit var moodBar: ProgressBar
     private lateinit var petNameText: TextView
@@ -61,6 +58,9 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private var mood = 70
     private var frame1Res = R.drawable.bird_frame1
     private var frame2Res = R.drawable.bird_frame2
+
+    // sleep 상태 전용 이미지
+    private var sleepImageRes: Int = R.drawable.bird_zzz // 기본값
 
     private var latestGrid: WeatherUtil.GridPoint? = null
 
@@ -80,41 +80,51 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         health = intent.getIntExtra("health", 80)
         mood = intent.getIntExtra("mood", 70)
 
-
-        var sleepMode = intent.getBooleanExtra("sleepMode", false)      //sleep 결과 받아오기
-        val sleepDurationMinutes = intent.getIntExtra("sleepDuration", 0)
-        if (sleepMode && sleepDurationMinutes > 0) {
-            val totalSeconds = sleepDurationMinutes
-            launch {
-                for (i in 1..totalSeconds) {
-                    delay(1000L)
-                    health = (health + 5).coerceAtMost(100)
-                    updateStatusBars()
-                }
-                speechBubble.text = "푹 잤어요! 😊 체력이 회복됐어요."
-                speechBubble.visibility = View.VISIBLE
-
-                sleepMode = false // 🟢 한 번만 실행되도록 종료
-            }
-        }                                                                               // sleep 끝
-        
-        petNameText.text = "이름: $petName"
-
         // 캐릭터에 따라 애니메이션 프레임 설정
         when (characterType) {
             "sanjini" -> {
                 frame1Res = R.drawable.bird_frame1
                 frame2Res = R.drawable.bird_frame2
+                sleepImageRes = R.drawable.bird_zzz
             }
             "hobanu" -> {
                 frame1Res = R.drawable.cow_frame1
                 frame2Res = R.drawable.cow_frame2
+                sleepImageRes = R.drawable.cow_zzz
             }
             "chacha" -> {
                 frame1Res = R.drawable.horse_frame1
                 frame2Res = R.drawable.horse_frame2
+                sleepImageRes = R.drawable.horse_zzz
             }
         }
+
+        petNameText.text = "이름: $petName"
+
+        var sleepMode = intent.getBooleanExtra("sleepMode", false)      //sleep 결과 받아오기
+        val sleepDurationMinutes = intent.getIntExtra("sleepDuration", 0)
+        if (sleepMode && sleepDurationMinutes > 0) {
+            petImageView.setImageResource(sleepImageRes) // 💤 수면 이미지 고정
+            speechBubble.text = "Zzz..."                // 💤 인삿말 변경
+            speechBubble.visibility = View.VISIBLE
+
+            launch {
+                for (i in 1..sleepDurationMinutes) {
+                    delay(1000L)
+                    health = (health + 5).coerceAtMost(100)
+                    updateStatusBars()
+                }
+
+                // 수면 종료 후 일반 애니메이션으로 복귀
+                petImageView.setImageResource(frame1Res)
+                startImageAnimation()
+                speechBubble.text = "푹 잤어요! 😊 체력이 회복됐어요."
+                speechBubble.visibility = View.VISIBLE
+            }
+
+            return // 👈 이후 코드는 실행하지 않도록 탈출
+        }
+        // sleep 끝
 
         Log.d("GameDebug", "onCreate 시작")
         Log.d("GameDebug", "characterType: $characterType, petImageResId: $petImageResId")
@@ -164,7 +174,6 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             startActivity(intent)
             updateStatusBars()
         }
-
 
         findViewById<Button>(R.id.feedButton).setOnClickListener {
             val intent = Intent(this, FeedActivity::class.java).apply {
@@ -248,7 +257,6 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         Log.d("Permission", "GrantResult: ${grantResults.joinToString()}")
@@ -277,7 +285,6 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             else -> "2300"
         }
     }
-
 
     private fun fetchWeather(nx: Int, ny: Int) {
         val apiKey = "qvAMhThL7ZEBL+V4L8GMLNX+yH8QaeAhHh6GZKBdRqjcC8nI0xhml0pdcKR9QBdn3xfkl+x0Ow+dLCl5wcubig=="
