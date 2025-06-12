@@ -99,13 +99,26 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             }
         }
 
+
+        launch {
+            try {
+                val greeting = WeatherFetcher.fetchWeatherGreeting()
+                speechBubble.text = greeting
+                speechBubble.visibility = View.VISIBLE
+            } catch (e: Exception) {
+                Log.e("WeatherGreeting", "날씨 인삿말 오류: ${e.message}")
+            }
+        }
+
+
+
         petNameText.text = "이름: $petName"
 
         var sleepMode = intent.getBooleanExtra("sleepMode", false)      //sleep 결과 받아오기
         val sleepDurationMinutes = intent.getIntExtra("sleepDuration", 0)
         if (sleepMode && sleepDurationMinutes > 0) {
-            petImageView.setImageResource(sleepImageRes) // 💤 수면 이미지 고정
-            speechBubble.text = "Zzz..."                // 💤 인삿말 변경
+            petImageView.setImageResource(sleepImageRes) // 수면 이미지 고정
+            speechBubble.text = "Zzz..."                 // 인삿말 변경
             speechBubble.visibility = View.VISIBLE
 
             launch {
@@ -117,12 +130,10 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
                 // 수면 종료 후 일반 애니메이션으로 복귀
                 petImageView.setImageResource(frame1Res)
-                startImageAnimation()
+                //startImageAnimation()
                 speechBubble.text = "푹 잤어요! 😊 체력이 회복됐어요."
                 speechBubble.visibility = View.VISIBLE
             }
-
-            return // 👈 이후 코드는 실행하지 않도록 탈출
         }
         // sleep 끝
 
@@ -150,15 +161,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         startAutoDecrease()
 
         // 날씨 인삿말 표시 (선택적으로)
-        launch {
-            try {
-                val greeting = WeatherFetcher.fetchWeatherGreeting()
-                speechBubble.text = greeting
-                speechBubble.visibility = View.VISIBLE
-            } catch (e: Exception) {
-                Log.e("WeatherGreeting", "날씨 인삿말 오류: ${e.message}")
-            }
-        }
+
         setupBackgroundChangeButton()
     }
 
@@ -198,7 +201,22 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
 
         findViewById<Button>(R.id.saveButton).setOnClickListener {
-            Toast.makeText(this, "저장하기 기능은 아직 구현 중입니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "저장되었습니다 !", Toast.LENGTH_SHORT).show()
+        }
+
+        findViewById<Button>(R.id.saveButton).setOnClickListener {
+            saveGameData(
+                petImageResId,                      // Int: 캐릭터 이미지 리소스 ID
+                characterType,                     // String: 캐릭터 타입 ("sanjini", "hobanu" 등)
+                petNameText.text.toString(),       // String: 펫 이름
+                health,                            // Int: 체력
+                mood                               // Int: 기분
+            )
+            Toast.makeText(this, "게임 저장됨!", Toast.LENGTH_SHORT).show()
+        }
+
+        findViewById<Button>(R.id.exitButton).setOnClickListener {
+            finishAffinity()  // 현재 액티비티 및 백스택에 있는 모든 액티비티 종료
         }
     }
 
@@ -283,6 +301,18 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             hour < 20 || (hour == 20 && minute < 10) -> "1700"
             hour < 23 || (hour == 23 && minute < 10) -> "2000"
             else -> "2300"
+        }
+    }
+
+    private fun saveGameData(petImageResId: Int, characterType: String, petName: String, health: Int, mood: Int) {
+        val prefs = getSharedPreferences("GameData", MODE_PRIVATE)
+        prefs.edit().apply {
+            putInt("petImageResId", petImageResId)
+            putString("characterType", characterType)
+            putString("petName", petName)
+            putInt("health", health)
+            putInt("mood", mood)
+            apply()
         }
     }
 

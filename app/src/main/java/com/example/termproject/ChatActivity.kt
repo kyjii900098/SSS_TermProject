@@ -51,6 +51,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         characterType = intent.getStringExtra("characterType") ?: "sanjini"
         val health = intent.getIntExtra("health", 80) // 기본값 80
         val mood = intent.getIntExtra("mood", 70)     // 기본값 70
+        val petName = intent.getStringExtra("petName") ?: "name"
 
         sendButton.setOnClickListener {
             val message = messageInput.text.toString().trim()
@@ -67,8 +68,10 @@ class ChatActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             val intent = Intent(this, GameActivity::class.java)
             intent.putExtra("sleepMode", true)
             intent.putExtra("characterType", characterType)
+            //intent.putExtra("petImageResId", petImageResId)
             intent.putExtra("health", health)
             intent.putExtra("mood", mood)
+            intent.putExtra("petName", petName)
             startActivity(intent)
             finish()
         }
