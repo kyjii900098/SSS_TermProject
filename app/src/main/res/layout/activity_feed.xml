@@ -4,11 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:background="#FFF3E0"
     android:padding="24dp">
 
-    <!-- 선택한 음식 이미지 표시 -->
     <ImageView
         android:id="@+id/foodImageView"
         android:layout_width="250dp"
@@ -17,24 +16,27 @@
         android:scaleType="centerCrop"
         android:background="@android:color/darker_gray" />
 
-    <!-- 갤러리에서 사진 선택 버튼 -->
     <Button
         android:id="@+id/selectImageButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="사진 선택하기"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:textSize="16sp"
         android:padding="12dp" />
+
     <Button
         android:id="@+id/cameraImageButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="카메라로 촬영하기" />
-    <!-- 먹이기 확정 버튼 -->
+        android:text="카메라로 촬영하기"
+        android:layout_marginBottom="12dp"
+        android:textSize="16sp"
+        android:padding="12dp" />
+
     <Button
         android:id="@+id/feedConfirmButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="먹이기"
         android:textSize="16sp"

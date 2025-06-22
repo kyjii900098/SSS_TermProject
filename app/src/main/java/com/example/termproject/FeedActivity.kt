@@ -56,14 +56,12 @@ class FeedActivity : AppCompatActivity() {
             checkCameraPermissionAndOpenCamera()
         }
 
-        // 📁 갤러리 선택
         selectBtn.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             startActivityForResult(intent, GALLERY_REQUEST_CODE)
         }
 
-        // 🍴 먹이주기
         feedBtn.setOnClickListener {
             imageBitmap?.let { bitmap ->
                 val inputImage = InputImage.fromBitmap(bitmap, 0)
