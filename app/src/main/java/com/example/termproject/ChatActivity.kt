@@ -83,7 +83,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 true
             } else false
         }
-        //loadChatHistory() // ✅ Firebase에서 기존 대화 불러오기
+        loadChatHistory() // 에러원인
     }
 
     private fun saveMessageToFirebase(message: ChatMessage) {
@@ -96,7 +96,6 @@ class ChatActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         chatAdapter.notifyItemInserted(chatMessages.size - 1)
         recyclerView.scrollToPosition(chatMessages.size - 1)
 
-        database.child("chats").child(userId).push().setValue(message)
         saveMessageToFirebase(message)
     }
 
@@ -111,15 +110,12 @@ class ChatActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                 val response = ChatGPTService.getResponse(message, characterType)
                 Log.d("ChatDebug", "GPT 응답: $response")
 
-                chatMessages.add(ChatMessage(response, isUser = false))
-                chatAdapter.notifyItemInserted(chatMessages.size - 1)
-                recyclerView.scrollToPosition(chatMessages.size - 1)
+                //chatMessages.add(ChatMessage(response, isUser = false))
+                addMessage(response, isUser = false)
 
             } catch (e: Exception) {
                 Log.e("ChatDebug", "응답 실패: ${e.message}")
                 chatMessages.add(ChatMessage("응답 실패: ${e.message}", isUser = false))
-                chatAdapter.notifyItemInserted(chatMessages.size - 1)
-                recyclerView.scrollToPosition(chatMessages.size - 1)
             }
         }
     }

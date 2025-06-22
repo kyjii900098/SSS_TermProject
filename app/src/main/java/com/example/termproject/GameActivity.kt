@@ -103,6 +103,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         launch {
             try {
                 val greeting = WeatherFetcher.fetchWeatherGreeting()
+
                 speechBubble.text = greeting
                 speechBubble.visibility = View.VISIBLE
             } catch (e: Exception) {
@@ -168,6 +169,19 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         setupBackgroundChangeButton()
     }
 
+    private fun startImageAnimation() {
+        animationHandler = Handler(Looper.getMainLooper())
+        animationRunnable = object : Runnable {
+            override fun run() {
+                val frame = if (isFirstFrame) frame1Res else frame2Res
+                petImageView.setImageResource(frame)
+                isFirstFrame = !isFirstFrame
+                animationHandler.postDelayed(this, 500)
+            }
+        }
+        animationHandler.post(animationRunnable)
+    }
+
     private fun setupButtons(petImageResId: Int, petName: String, characterType: String) {
         findViewById<Button>(R.id.talkButton).setOnClickListener {
             val intent = Intent(this, ChatActivity::class.java)
@@ -219,18 +233,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
 
-    private fun startImageAnimation() {
-        animationHandler = Handler(Looper.getMainLooper())
-        animationRunnable = object : Runnable {
-            override fun run() {
-                val frame = if (isFirstFrame) frame1Res else frame2Res
-                petImageView.setImageResource(frame)
-                isFirstFrame = !isFirstFrame
-                animationHandler.postDelayed(this, 500)
-            }
-        }
-        animationHandler.post(animationRunnable)
-    }
+
 
     private fun updateStatusBars() {
         healthBar.progress = health

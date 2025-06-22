@@ -23,8 +23,19 @@
         android:textSize="18sp"
         android:padding="12dp"
         android:background="@android:drawable/edit_text"
-        android:layout_marginBottom="24dp" />
+        android:layout_marginBottom="16dp" />
 
+    <TextView
+        android:id="@+id/characterDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="캐릭터 설명이 여기에 표시됩니다."
+        android:textSize="16sp"
+        android:textColor="#444444"
+        android:gravity="center"
+        android:background="#AA888888"
+        android:padding="12dp"
+        android:layout_marginBottom="24dp" />
     <Button
         android:id="@+id/confirmButton"
         android:layout_width="wrap_content"

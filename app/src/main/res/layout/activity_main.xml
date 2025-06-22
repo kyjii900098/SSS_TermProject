@@ -86,7 +86,7 @@
 
         <Button
             android:id="@+id/continueButton"
-            android:layout_width="100dp"
+            android:layout_width="120dp"
             android:layout_height="40dp"
             android:text="이어하기"
             android:textSize="14sp"
@@ -97,7 +97,7 @@
 
         <Button
             android:id="@+id/startButton"
-            android:layout_width="100dp"
+            android:layout_width="120dp"
             android:layout_height="40dp"
             android:text="시작하기"
             android:textSize="14sp"
@@ -108,7 +108,7 @@
 
         <Button
             android:id="@+id/exitButton"
-            android:layout_width="100dp"
+            android:layout_width="120dp"
             android:layout_height="40dp"
             android:text="종료하기"
             android:textSize="14sp"

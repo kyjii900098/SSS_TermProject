@@ -5,7 +5,6 @@
     android:padding="0dp"
     android:background="#FFFDE7">
 
-    <!-- 상단 왼쪽: 이름과 상태 -->
     <FrameLayout
         android:id="@+id/backgroundFragmentContainer"
         android:layout_width="match_parent"
