@@ -27,6 +27,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private lateinit var sendButton: ImageButton
     private lateinit var recyclerView: RecyclerView
     private lateinit var chatAdapter: ChatAdapter
+    private var mood: Int = 70
 
     private lateinit var characterType: String
 
@@ -36,6 +37,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private val userId = "demo_user" // 추후 로그인 연동 시 교체
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
@@ -50,7 +52,7 @@ class ChatActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
         characterType = intent.getStringExtra("characterType") ?: "sanjini"
         val health = intent.getIntExtra("health", 80) // 기본값 80
-        val mood = intent.getIntExtra("mood", 70)     // 기본값 70
+        mood = intent.getIntExtra("mood", 70)     // 기본값 70
         val petName = intent.getStringExtra("petName") ?: "name"
 
         sendButton.setOnClickListener {
@@ -112,6 +114,12 @@ class ChatActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
                 //chatMessages.add(ChatMessage(response, isUser = false))
                 addMessage(response, isUser = false)
+                if (mood >= 100){
+                }
+                else{
+                    Toast.makeText(this@ChatActivity, "대화를 통해 기분이 +5 추가됐어요!", Toast.LENGTH_SHORT).show()
+                    mood += 5
+                }
 
             } catch (e: Exception) {
                 Log.e("ChatDebug", "응답 실패: ${e.message}")

@@ -118,11 +118,11 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         var sleepMode = intent.getBooleanExtra("sleepMode", false)      //sleep 결과 받아오기
         val sleepDurationMinutes = intent.getIntExtra("sleepDuration", 0)
         if (sleepMode && sleepDurationMinutes > 0) {
-            petImageView.setImageResource(sleepImageRes) // 수면 이미지 고정
-            speechBubble.text = "Zzz..."                 // 인삿말 변경
-            speechBubble.visibility = View.VISIBLE
 
+            //speechBubble.visibility = View.VISIBLE
             launch {
+                petImageView.setImageResource(sleepImageRes) // 수면 이미지 고정
+                speechBubble.text = "Zzz..."                 // 인삿말 변경
                 for (i in 1..sleepDurationMinutes) {
                     delay(1000L)
                     health = (health + 5).coerceAtMost(100)
@@ -131,9 +131,9 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
                 // 수면 종료 후 일반 애니메이션으로 복귀
                 petImageView.setImageResource(frame1Res)
-                //startImageAnimation()
+                startImageAnimation()
                 speechBubble.text = "푹 잤어요! 😊 체력이 회복됐어요."
-                speechBubble.visibility = View.VISIBLE
+                //speechBubble.visibility = View.VISIBLE
             }
         } else {
             petImageView.setImageResource(frame1Res)
@@ -146,7 +146,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
         // 초기 이미지 설정 및 애니메이션 시작
         petImageView.setImageResource(frame1Res)
-        startImageAnimation()
+        //startImageAnimation()
 
         updateStatusBars()
 
@@ -185,7 +185,7 @@ class GameActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private fun setupButtons(petImageResId: Int, petName: String, characterType: String) {
         findViewById<Button>(R.id.talkButton).setOnClickListener {
             val intent = Intent(this, ChatActivity::class.java)
-            mood = (mood + 10).coerceAtMost(100)
+            mood = (mood + 5).coerceAtMost(100)
             intent.putExtra("petName", petName) // 필요시 이름 전달
             intent.putExtra("petImageResId", petImageResId) // 필요시 캐릭터도
             intent.putExtra("characterType", characterType)
